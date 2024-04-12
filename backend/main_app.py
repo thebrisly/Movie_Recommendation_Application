@@ -4,6 +4,7 @@ from google.cloud import bigquery
 from elasticsearch import Elasticsearch
 import requests
 import pandas as pd
+import os
 
 
 #####################
@@ -26,6 +27,7 @@ client_elastic = Elasticsearch(URL_ENDPOINT, api_key=API_KEY)
 @app.route('/')
 def index():
     return "Here is the backend's website"
+
 
 ############################
 # Elastic Search Functions #
@@ -143,8 +145,7 @@ def get_best_movies(users_df, base_user_movies):
 
 @app.route('/posters', methods=['GET'])
 def get_movie_poster():
-    #tmdb_id = request.args.get('tmdb_id')
-    tmdb_id =671
+    tmdb_id = request.args.get('tmdb_id')
 
     api_key = "35a1a21523af09d62c97695abf6bc067"
     base_url = f"https://api.themoviedb.org/3/movie/{tmdb_id}/images?api_key={api_key}"
