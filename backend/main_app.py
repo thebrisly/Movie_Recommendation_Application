@@ -157,14 +157,14 @@ def get_movie_poster():
             poster_url = f"https://image.tmdb.org/t/p/w500{data['posters'][0]['file_path']}"
             return jsonify({"poster_url": poster_url})  # Returning JSON object with poster URL
         else:
-            return jsonify({"error": "Poster not found"}), 404
+            return jsonify({"poster_url": "../not_found.jpeg"})
     except Exception as e:
         return jsonify({"error": f"Error fetching movie poster: {e}"}), 500
 
 
 @app.route('/details', methods=['GET'])
 def get_movie_details():
-    #tmdb_id = request.args.get('tmdb_id')  # Pour obtenir le tmdb_id à partir des paramètres de la requête
+    tmdb_id = request.args.get('tmdb_id')  # Pour obtenir le tmdb_id à partir des paramètres de la requête
 
     api_key = "35a1a21523af09d62c97695abf6bc067"
     base_url = f"https://api.themoviedb.org/3/movie/{tmdb_id}?api_key={api_key}"
@@ -176,7 +176,7 @@ def get_movie_details():
             # Retourne les détails du film au format JSON
             return jsonify({"overview": data["overview"]})
         else:
-            return jsonify({"error": "Movie details not found"}), 404
+            return jsonify({"overview": "Movie details not found"})
     except Exception as e:
         return jsonify({"error": f"Error fetching movie details: {e}"}), 500
 
