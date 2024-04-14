@@ -85,8 +85,13 @@ def load_movies():
 @app.route('/recommendations', methods=['GET'])
 def get_recommendations():
     
-    cold_user_movies = [318, 404, 349, 200, 123]
-
+    cold_user_movies = request.args.get('favorites')
+    
+    if cold_user_movies is None or cold_user_movies == "":
+        cold_user_movies = [64, 463]
+    else:
+        cold_user_movies = [int(movie_id) for movie_id in cold_user_movies.split(',')]
+    
     query = """
     SELECT * FROM (
     SELECT
@@ -106,7 +111,7 @@ def get_recommendations():
     best_users = find_similar_users(cold_user_movies, best_predictions_by_users)
     best_movies = get_best_movies(best_users, cold_user_movies)
 
-    return results.to_json()
+    return best_movies.to_json()
 
 
 ##############################
@@ -129,14 +134,17 @@ def find_similar_users(preferences, predictions_by_users):
 
 def get_best_movies(users_df, base_user_movies):
     top_users_movies = users_df.iloc[0:2]['best_predictions'].tolist()  # Récupérer les films des 2 premiers utilisateurs
-    recommended_movies = set()  # Utiliser un ensemble pour éviter les doublons
+    recommended_movies = set(base_user_movies)  # Utiliser un ensemble pour éviter les doublons
 
     for movies in top_users_movies:
         for movie in movies:
             if movie not in base_user_movies:  # Vérifier si le film n'est pas déjà dans les préférences de l'utilisateur de base
                 recommended_movies.add(movie)
 
-    return list(recommended_movies)
+    recommended_movies_list = list(recommended_movies)
+
+    return pd.DataFrame({'movieId': recommended_movies_list})
+
 
 
 #####################
