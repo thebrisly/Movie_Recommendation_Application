@@ -15,7 +15,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Connecting to Big Query
-client_google = bigquery.Client.from_service_account_json('../key/testapi-415115-18f8f1b39899.json')
+client_google = bigquery.Client.from_service_account_json('./testapi-415115-18f8f1b39899.json')
 
 # Connecting to Elastic Search thanks to the API
 URL_ENDPOINT =   "https://67de47c1e10848d4a878638113b8bbb7.europe-west3.gcp.cloud.es.io:443"
@@ -169,7 +169,7 @@ def get_movie_poster():
             poster_url = f"https://image.tmdb.org/t/p/w500{data['posters'][0]['file_path']}"
             return jsonify({"poster_url": poster_url})  # Returning JSON object with poster URL
         else:
-            return jsonify({"poster_url": "../not_found.jpeg"})
+            return jsonify({"poster_url": "/images/not_found.jpeg"})
     except Exception as e:
         return jsonify({"error": f"Error fetching movie poster: {e}"}), 500
 
