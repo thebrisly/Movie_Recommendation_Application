@@ -11,31 +11,31 @@ st.set_page_config(layout="wide")
 # Caches and fetches movie details from the backend
 @st.cache_data
 def fetch_movies():
-    backend_url = 'http://127.0.0.1:8080/load_movies'
+    backend_url = 'https://ass2-backend-oeouywpojq-oa.a.run.app/load_movies'
     response = requests.get(backend_url)
     return pd.DataFrame(response.json()) if response.status_code == 200 else st.error('Failed to fetch movies from the backend.')
 
 @st.cache_data
 def search(title):
-    backend_url = "http://127.0.0.1:8080/search"
+    backend_url = "https://ass2-backend-oeouywpojq-oa.a.run.app/search"
     response = requests.get(backend_url, params={"q" : title})   
     movies_found = pd.DataFrame(response.json())
     return pd.merge(movies_found, fetch_movies(), on='movieId', how='left').rename(columns={'title_x': 'title', 'genres_x': 'genres'})
 
 @st.cache_data
 def posters(tmdb_id):
-    backend_url = "http://127.0.0.1:8080/posters"
+    backend_url = "https://ass2-backend-oeouywpojq-oa.a.run.app/posters"
     response = requests.get(backend_url, params={"tmdb_id" : tmdb_id})
     return response.json()['poster_url']
 
 @st.cache_data
 def details(tmdb_id):
-    backend_url = "http://127.0.0.1:8080/details"
+    backend_url = "https://ass2-backend-oeouywpojq-oa.a.run.app/details"
     response = requests.get(backend_url, params={"tmdb_id" : tmdb_id})
     return response.json()['overview']
 
 def recommendations(favorites):
-    backend_url = "http://127.0.0.1:8080/recommendations"
+    backend_url = "https://ass2-backend-oeouywpojq-oa.a.run.app/recommendations"
     headers = {'Content-Type': 'application/json'}  # Spécifiez le type de contenu comme JSON
     data = {'favorites': favorites}
     
@@ -102,7 +102,6 @@ with col2:
 
 # Displaying the movies
 movies_to_display = 3
-st.write(st.session_state['displayed_movies'])
 for i in range(0, len(st.session_state['displayed_movies']), movies_to_display):
     row_data = st.session_state['displayed_movies'].iloc[i:i+movies_to_display]
     cols = st.columns(movies_to_display)
