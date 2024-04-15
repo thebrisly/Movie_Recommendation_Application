@@ -82,16 +82,16 @@ def load_movies():
     return movies_df.to_json()
 
 
-@app.route('/recommendations', methods=['GET'])
+@app.route('/recommendations', methods=['POST'])
 def get_recommendations():
+    data = request.json  # Récupérer les données JSON du corps de la requête
+
+    favorites = data.get('favorites', [])  # Récupérer les favoris de la requête JSON
+    print("1", favorites)
     
-    cold_user_movies = request.args.get('favorites')
-    
-    if cold_user_movies is None or cold_user_movies == "":
-        cold_user_movies = [64, 463]
-    else:
-        cold_user_movies = [int(movie_id) for movie_id in cold_user_movies.split(',')]
-    
+    if not favorites:  # Vérifiez si la liste des favoris est vide
+        favorites = [64, 463]
+
     query = """
     SELECT * FROM (
     SELECT
@@ -107,11 +107,14 @@ def get_recommendations():
     """
     results = client_google.query(query).to_dataframe()
 
+    print("2", favorites)
     best_predictions_by_users = results.groupby('userId')['movieId'].apply(list).reset_index(name='best_predictions')
-    best_users = find_similar_users(cold_user_movies, best_predictions_by_users)
-    best_movies = get_best_movies(best_users, cold_user_movies)
+    best_users = find_similar_users(favorites, best_predictions_by_users)
+    best_movies = get_best_movies(best_users, favorites)
 
+    print("3", best_movies)
     return best_movies.to_json()
+
 
 
 ##############################
@@ -133,17 +136,18 @@ def find_similar_users(preferences, predictions_by_users):
     
 
 def get_best_movies(users_df, base_user_movies):
-    top_users_movies = users_df.iloc[0:2]['best_predictions'].tolist()  # Récupérer les films des 2 premiers utilisateurs
-    recommended_movies = set(base_user_movies)  # Utiliser un ensemble pour éviter les doublons
+    top_users_movies = users_df.iloc[0:2]['best_predictions'].tolist()
+    recommended_movies = set(base_user_movies)
 
     for movies in top_users_movies:
         for movie in movies:
-            if movie not in base_user_movies:  # Vérifier si le film n'est pas déjà dans les préférences de l'utilisateur de base
+            if movie not in base_user_movies:
                 recommended_movies.add(movie)
 
-    recommended_movies_list = list(recommended_movies)
+    recommended_movies_list = [movie for movie in recommended_movies if movie not in base_user_movies]
 
     return pd.DataFrame({'movieId': recommended_movies_list})
+
 
 
 
