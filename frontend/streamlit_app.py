@@ -16,13 +16,14 @@ st.set_page_config(layout="wide") #to display everything in big
 # Function to fetch the list of movies from the backend API
 @st.cache_data
 def fetch_movies():
-    backend_url = 'https://caa-a2-laura-backend-6mfovafpza-oa.a.run.app//load_movies'
+    backend_url = 'https://ass2-backend-2-oeouywpojq-oa.a.run.app//load_movies'
+    
     response = requests.get(backend_url)
     return pd.DataFrame(response.json()) if response.status_code == 200 else st.error('Failed to fetch movies from the backend.')
 
 @st.cache_data
 def search(title):
-    backend_url = "https://caa-a2-laura-backend-6mfovafpza-oa.a.run.app//search"
+    backend_url = "https://ass2-backend-2-oeouywpojq-oa.a.run.app//search"
     response = requests.get(backend_url, params={"q": title})
     if response.status_code == 200:
         movies_found = pd.DataFrame(response.json())
@@ -37,20 +38,20 @@ def search(title):
 # Function to fetch the poster URL for a given movie TMDB ID from the backend API
 @st.cache_data
 def posters(tmdb_id):
-    backend_url = "https://caa-a2-laura-backend-6mfovafpza-oa.a.run.app//posters"
+    backend_url = "https://ass2-backend-2-oeouywpojq-oa.a.run.app//posters"
     response = requests.get(backend_url, params={"tmdb_id" : tmdb_id})
     return response.json()['poster_url']
 
 # Function to fetch movie details for a given movie TMDB ID from the backend API
 @st.cache_data
 def details(tmdb_id):
-    backend_url = "https://caa-a2-laura-backend-6mfovafpza-oa.a.run.app//details"
+    backend_url = "https://ass2-backend-2-oeouywpojq-oa.a.run.app//details"
     response = requests.get(backend_url, params={"tmdb_id" : tmdb_id})
     return response.json()['overview']
 
 # Function to get movie recommendations based on user favorites using the backend API
 def recommendations(favorites):
-    backend_url = "https://caa-a2-laura-backend-6mfovafpza-oa.a.run.app//recommendations"
+    backend_url = "https://ass2-backend-2-oeouywpojq-oa.a.run.app//recommendations"
     headers = {'Content-Type': 'application/json'}  # Specify content type as JSON
     data = {'favorites': favorites}
     
