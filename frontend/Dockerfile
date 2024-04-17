@@ -9,5 +9,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY streamlit_app.py .
 
+COPY ./images ./images
 
 CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8080"]
