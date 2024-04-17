@@ -134,7 +134,7 @@ def find_similar_users(preferences, predictions_by_users):
 
 def get_best_movies(users_df, base_user_movies):
     top_users_movies = users_df.iloc[0:2]['best_predictions'].tolist()  # Récupérer les films des 2 premiers utilisateurs
-    recommended_movies = set(base_user_movies)  # Utiliser un ensemble pour éviter les doublons
+    recommended_movies = set()
 
     for movies in top_users_movies:
         for movie in movies:
