@@ -121,31 +121,41 @@ else:
     st.session_state['displayed_movies'] = fetch_movies().head(50)  # Default to showing some movies
     st.session_state['show_like_button'] = True  # Allow showing the like button
 
-# Splitting the next line into 2 columns to have to buttons side by side
-# Left column: Get recommendations based on user likes wit the recommendation function coded in the backend
-# Right column: Get 6 random movies (it will just display 6 rando numbers from the list of all movies)
-col1, col2 = st.columns(2)
+# Splitting the next line into 3 columns to have buttons side by side
+# Left column: Get recommendations based on user likes
+# Middle column: Get 6 random movies
+# Right column: Show All Movies
+col1, col2, col3 = st.columns([1, 3, 3])
 
 with col1:
+    if st.button("All Movies"):
+        # Reset the displayed_movies to the first 50 movies from the database
+        st.session_state['displayed_movies'] = fetch_movies().head(50)
+        st.session_state['show_like_button'] = True  # Ensure like buttons are visible for all movies
+    
+
+with col2:
     if st.button("Get recommendations based on your likes"):
         if st.session_state['favorites']:  # Check if there are favorites selected
             recommendations_df = recommendations(st.session_state['favorites'])
             if not recommendations_df.empty:
                 st.session_state['displayed_movies'] = recommendations_df
-                st.session_state['show_like_button'] = False  # Set the flag to not show the like button
+                st.session_state['show_like_button'] = False  # Optionally control visibility of like buttons
             else:
                 st.error("Failed to fetch recommendations. Please try again.")
         else:
-            st.warning("You must add at least one movie to favorites to get recommendations.")  # Inform the user that they need favorites
+            st.warning("You must add at least one movie to favorites to get recommendations.")
 
-with col2:
+with col3:
     if st.button("Get 6 random movies"):
         random_movies_df = fetch_movies().sample(6)
         if not random_movies_df.empty:
             st.session_state['displayed_movies'] = random_movies_df
-            st.session_state['show_like_button'] = False  # Set the flag to not show the like button
+            st.session_state['show_like_button'] = False  # Optionally control visibility of like buttons
         else:
             st.error("Failed to fetch random movies.")
+    
+
 
 
 # Display movies in an aesthetic way: 3 posters per line
