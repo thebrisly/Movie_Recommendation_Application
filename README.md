@@ -7,7 +7,7 @@ Here is an example of what it looks like :
 <img width="1502" alt="Capture d’écran 2024-04-15 à 11 11 02" src="https://github.com/thebrisly/Movie_Recommendation_Application/assets/84352348/23235078-0e3b-4c94-9eb4-87ae00cf3fd1">
 
 # Website link
-Link to the website : https://ass2-frontend-oeouywpojq-oa.a.run.app/
+Link to the website : [https://ass2-frontend-oeouywpojq-oa.a.run.app/](https://ass2-frontend-2-oeouywpojq-oa.a.run.app/)
 
 ## Functionalities implemented 
 
