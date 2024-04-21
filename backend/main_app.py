@@ -18,8 +18,8 @@ CORS(app)
 client_google = bigquery.Client.from_service_account_json('./testapi-415115-18f8f1b39899.json')
 
 # Connecting to Elastic Search thanks to the API
-URL_ENDPOINT =   "https://67de47c1e10848d4a878638113b8bbb7.europe-west3.gcp.cloud.es.io:443"
-API_KEY = "M2ZiRTBZNEJudktRZGNqdGxLVmc6MV9qazJKajRRWGVWaGE2UHd5MTlHQQ=="
+URL_ENDPOINT =   # private end point here
+API_KEY = # private key here
 INDEX_NAME = 'movie_recommendation'
 
 client_elastic = Elasticsearch(URL_ENDPOINT, api_key=API_KEY)
@@ -155,7 +155,7 @@ def get_best_movies(users_df, base_user_movies):
 def get_movie_poster():
     tmdb_id = request.args.get('tmdb_id')
 
-    api_key = "35a1a21523af09d62c97695abf6bc067"
+    api_key =  # private key here
     base_url = f"https://api.themoviedb.org/3/movie/{tmdb_id}/images?api_key={api_key}"
     
     try:
@@ -174,7 +174,7 @@ def get_movie_poster():
 def get_movie_details():
     tmdb_id = request.args.get('tmdb_id')  # Pour obtenir le tmdb_id à partir des paramètres de la requête
 
-    api_key = "35a1a21523af09d62c97695abf6bc067"
+    api_key = # private key here
     base_url = f"https://api.themoviedb.org/3/movie/{tmdb_id}?api_key={api_key}"
     
     try:
